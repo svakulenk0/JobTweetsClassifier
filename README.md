@@ -12,6 +12,6 @@ Requirements: minimum supervision in terms of prior linguistic knowledge, e.g. a
 
 ## References
 
-1. (Crepe)[https://github.com/zhangxiangxiao/Crepe]
-2. (fastText)[https://github.com/facebookresearch/fastText]
-3. [https://github.com/facebookresearch/fastText/blob/master/tutorials/supervised-learning.md]
+1. [Crepe](https://github.com/zhangxiangxiao/Crepe)
+2. [fastText](https://github.com/facebookresearch/fastText)
+3. (https://github.com/facebookresearch/fastText/blob/master/tutorials/supervised-learning.md)
