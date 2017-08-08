@@ -14,6 +14,9 @@ from threading import Thread
 from sklearn.externals import joblib
 from sklearn.feature_extraction.text import TfidfVectorizer
 
+from twython import Twython
+
+from twitter_settings import *
 from stream import stream_tweets
 
 
@@ -24,6 +27,9 @@ class JobTweetsClassifier():
         self.clf = joblib.load(model_path)
         # tweet representation as tfidf
         self.vectorizer = joblib.load(vectorizer_path)
+        # connect to Twitter
+        # twitter = Twython(APP_KEY, APP_SECRET)
+        self.twitter = Twython(APP_KEY, APP_SECRET, OAUTH_TOKEN, OAUTH_TOKEN_SECRET)
 
     def launch(self):
         # start streaming tweets
@@ -42,9 +48,11 @@ class JobTweetsClassifier():
 
                 tweet_vector = self.vectorizer.transform([tweet_text])
                 job_tweet_prediction = self.clf.predict_proba(tweet_vector)[0,1]
-                if job_tweet_prediction > 0.61:
+                if job_tweet_prediction > 0.73:
                     print tweet_text
                     print job_tweet_prediction
+                    # retweet
+                    self.twitter.update_status(status='https://twitter.com/%s/status/%s' % (tweet['user']['screen_name'], tweet['id']))
 
 
 def test_detect_jobs(model_path='random_forest.pkl'):
