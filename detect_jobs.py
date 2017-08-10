@@ -44,15 +44,18 @@ class JobTweetsClassifier():
         while True:
             if len(tweets_queue) > 0:
                 tweet = tweets_queue.popleft()
-                tweet_text = tweet['text'].encode('utf-8').replace('\n', '')
 
-                tweet_vector = self.vectorizer.transform([tweet_text])
-                job_tweet_prediction = self.clf.predict_proba(tweet_vector)[0,1]
-                if job_tweet_prediction > 0.73:
-                    print tweet_text
-                    print job_tweet_prediction
-                    # retweet
-                    self.twitter.update_status(status='https://twitter.com/%s/status/%s' % (tweet['user']['screen_name'], tweet['id']))
+                # ignore retweets
+                if not 'retweeted_status' in tweet.keys() and tweet['in_reply_to_status_id'] == None:
+                    tweet_text = tweet['text'].encode('utf-8').replace('\n', '')
+                    # print (tweet_text)
+                    tweet_vector = self.vectorizer.transform([tweet_text])
+                    job_tweet_prediction = self.clf.predict_proba(tweet_vector)[0,1]
+                    if job_tweet_prediction > 0.73:
+                        print tweet_text
+                        print job_tweet_prediction
+                        # retweet
+                        self.twitter.update_status(status='https://twitter.com/%s/status/%s' % (tweet['user']['screen_name'], tweet['id']))
 
 
 def test_detect_jobs(model_path='random_forest.pkl'):
