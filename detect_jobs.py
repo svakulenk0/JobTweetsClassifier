@@ -12,7 +12,6 @@ from collections import deque
 from threading import Thread
 
 from sklearn.externals import joblib
-from sklearn.feature_extraction.text import TfidfVectorizer
 
 from twython import Twython
 
@@ -60,7 +59,15 @@ class JobTweetsClassifier():
 
 def test_detect_jobs(model_path='random_forest.pkl'):
     jobs_monitor = JobTweetsClassifier(model_path)
-    jobs_monitor.launch()
+    # start streaming
+    while True:
+        try:
+            print ('Listening...')
+            jobs_monitor.launch()
+        except Exception as e:
+            # reconnect on exceptions
+            print (e)
+            continue
 
 
 if __name__ == "__main__":
